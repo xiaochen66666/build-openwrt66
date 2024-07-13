@@ -11,7 +11,7 @@ on:
       device:
         description: '请输入设备型号,比如: ax6s wr30u-stock x86_64_DEVICE_generic'
         required: true
-        default: 'K3'
+        default: 'k3'
 
 jobs:
   build:
