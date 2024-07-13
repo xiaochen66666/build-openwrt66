@@ -39,6 +39,13 @@ jobs:
     - name: Install feeds
       run: cd lede && ./scripts/feeds install -a && ./scripts/feeds update -a && ./scripts/feeds install -a
 
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        
     - name: Load custom configuration
       run: |
         if ! target_device=$(grep -m 1 "^config TARGET_.*$(echo ${{ inputs.device }} | xargs)" lede/tmp/.config-target.in); then
@@ -55,12 +62,6 @@ jobs:
         cat config.buildinfo >>lede/.config && cat lede/.config
         echo "DEVICE_NAME=${DEVICE_NAME}" >> $GITHUB_ENV
 
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         
     - name: Compile ${{ env.DEVICE_NAME }} firmware
       run: cd lede && make -j$(nproc) defconfig download clean world
