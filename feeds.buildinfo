@@ -1,2 +1,4 @@
 #This includes only the changes compared to the default configuration:
-#src-git helloworld https://github.com/fw876/helloworld.git
+src-git helloworld https://github.com/fw876/helloworld.git
+src-git passwall https://github.com/xiaorouji/openwrt-passwall.git
+src-git passwallpackages https://github.com/xiaorouji/openwrt-passwall-packages.git
